@@ -25,7 +25,10 @@ def signup(request):
             raw_password = form.cleaned_data.get("password1")
             user = authenticate(username=username, password=raw_password)
             auth_login(request, user)
-            return redirect("index")
+            a = redirect("index")
+            # Turbo expects a 303 response on form success
+            a.status_code = 303
+            return a
         # Turbo expects a 422 response on form errors
         status = 422
     else:
