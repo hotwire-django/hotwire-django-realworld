@@ -1,0 +1,5 @@
+Django
+pytest
+pytest-django
+black
+pyyaml
