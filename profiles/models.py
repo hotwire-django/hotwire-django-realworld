@@ -67,6 +67,14 @@ class Profile(TimestampedModel):
         """Returns True if we have favorited `article`; else False."""
         return self.favorites.filter(pk=article.pk).exists()
 
+    def img(self):
+        if self.image:
+            return self.image
+        return "https://static.productionready.io/images/smiley-cyrus.jpg"
+
+    def name(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):

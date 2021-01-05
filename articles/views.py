@@ -1,3 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def article(req, title):
+    print(title)
+    return render(req, "articles/article.html")

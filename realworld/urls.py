@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from home import views as home_views
+from articles import views as articles_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home_views.index),
+    path("article/<slug:title>/", articles_views.article, name="article"),
 ]

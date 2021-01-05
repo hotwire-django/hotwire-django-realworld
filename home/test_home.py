@@ -1,10 +1,13 @@
-from .views import index
+from django.test import TestCase
+from django.test import Client
 
 
-def test_index(rf):
-    request = rf.get("/")
-    response = index(request)
-    assert response.status_code == 200
-    assert b"conduit" in response.content
-    assert b"How to build webapps that scale" in response.content
-    assert b"emberjs" in response.content
+class MyTest(TestCase):
+    fixtures = ["data.yaml"]
+
+    def test_index(self):
+        response = Client().get("/")
+        assert response.status_code == 200
+        assert b"conduit" in response.content
+        assert b"How to build webapps that scale" in response.content
+        assert b"emberjs" in response.content
