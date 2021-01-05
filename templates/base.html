@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="//demo.productionready.io/main.css" />
 
     <script
-      src="{% static 'js/turbo.min.js' %}"
+      src="https://cdn.skypack.dev/pin/@hotwired/turbo@v7.0.0-beta.2-ou6dW2bg0qdKgUED7QEB/min/@hotwired/turbo.js"
       defer
       data-turbo-track="reload"
     ></script>
@@ -31,20 +31,20 @@
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <!-- Add "active" class when you're on that page" -->
-            <a class="nav-link active" href="">Home</a>
+            <a class="nav-link active" href="{% url 'index' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{% url 'article_create' %}">
               <i class="ion-compose"></i>&nbsp;New Post
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">
+            <a class="nav-link" href="{% url 'profile_edit' %}">
               <i class="ion-gear-a"></i>&nbsp;Settings
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="">Sign up</a>
+            <a class="nav-link" href="{% url 'signup' %}">Sign up</a>
           </li>
         </ul>
       </div>

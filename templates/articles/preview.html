@@ -9,7 +9,7 @@
       <i class="ion-heart"></i> {{ article.favorited_by.count }}
     </button>
   </div>
-  <a href="{% url 'article' article.slug %}" class="preview-link">
+  <a href="{% url 'article_view' article.slug %}" class="preview-link">
     <h1>{{ article.title }}</h1>
     <p>{{ article.description }}</p>
     <span>Read more...</span>

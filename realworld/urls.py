@@ -17,9 +17,16 @@ from django.contrib import admin
 from django.urls import path
 from home import views as home_views
 from articles import views as articles_views
+from profiles import views as profile_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home_views.index, name="index"),
-    path("article/<slug:title>/", articles_views.article, name="article"),
+    path("article/<slug:title>/", articles_views.view, name="article_view"),
+    path("article/<slug:title>/edit", articles_views.edit, name="article_edit"),
+    path("article/create", articles_views.create, name="article_create"),
+    path("@<slug:profile>/", profile_views.view, name="profile_view"),
+    path("settings/", profile_views.edit, name="profile_edit"),
+    path("register/", home_views.signup, name="signup"),
+    path("login/", home_views.login, name="login"),
 ]

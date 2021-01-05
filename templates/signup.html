@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+<div class="auth-page">
+  <div class="container page">
+    <div class="row">
+      <div class="col-md-6 offset-md-3 col-xs-12">
+        <h1 class="text-xs-center">Sign up</h1>
+        <p class="text-xs-center">
+          <a href="">Have an account?</a>
+        </p>
+
+        <div class="error-messages">
+          {{ form.username.errors }} {{ form.password.errors }}
+        </div>
+
+        <form method="post">
+          {% csrf_token %}
+          <fieldset class="form-group">{{ form.username }}</fieldset>
+          <fieldset class="form-group">{{ form.password }}</fieldset>
+          <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
+            Sign up
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
