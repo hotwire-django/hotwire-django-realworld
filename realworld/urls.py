@@ -20,6 +20,6 @@ from articles import views as articles_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", home_views.index),
+    path("", home_views.index, name="index"),
     path("article/<slug:title>/", articles_views.article, name="article"),
 ]
