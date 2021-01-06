@@ -3,3 +3,5 @@ pytest
 pytest-django
 black
 pyyaml
+random-username
+essential-generators

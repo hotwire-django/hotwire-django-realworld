@@ -4,7 +4,7 @@ from realworld.models import TimestampedModel
 
 
 class Article(TimestampedModel):
-    slug = models.SlugField(db_index=True, max_length=255, unique=True)
+    slug = models.SlugField(db_index=True, max_length=255, primary_key=True)
     title = models.CharField(db_index=True, max_length=255)
 
     description = models.TextField()

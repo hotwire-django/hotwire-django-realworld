@@ -8,7 +8,7 @@ A RealWorld Django app using Turbo. See [RealWorld](https://github.com/gothinkst
 1. source venv/bin/activate
 1. pip install -r requirements.txt
 1. ./manage.py migrate
-1. ./manage.py loaddata data.yml
+1. ./manage.py createdata 10
 1. ./manage.py runserver
 
 ## Tests
