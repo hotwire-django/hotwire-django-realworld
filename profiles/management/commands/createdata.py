@@ -46,11 +46,12 @@ class Command(BaseCommand):
             [User(username=n, password="turbodjango") for n in names]
         )
         print(users)
+        gen = DocumentGenerator()
+        gen.init_word_cache(5000)
+        gen.init_sentence_cache(5000)
         for user in users:
-            gen = DocumentGenerator()
             user = User.objects.get(username=user.username)
             profile = Profile.objects.create(user=user, bio=gen.sentence())
-
             articles = Article.objects.bulk_create(
                 [
                     Article(
