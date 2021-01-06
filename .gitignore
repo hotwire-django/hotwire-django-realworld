@@ -118,6 +118,7 @@ env.bak/
 venv.bak/
 pythonenv*
 .vscode
+.idea
 
 # Spyder project settings
 .spyderproject
