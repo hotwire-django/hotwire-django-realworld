@@ -45,7 +45,10 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile_edit' %}">
+            <a
+              class="nav-link"
+              href="{% url 'profile_view' profile=user.username %}"
+            >
               {{user.username}}
             </a>
           </li>

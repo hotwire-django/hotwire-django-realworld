@@ -1,10 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import EditProfileForm
+from .models import Profile
+from articles.models import Article
+from django.contrib.auth import get_user_model
 
 
 def view(req, profile):
-    return render(req, "profile/detail.html")
+    user = get_object_or_404(get_user_model(), username=profile)
+    articles = Article.objects.filter(author=user.profile)
+    return render(
+        req, "profile/detail.html", context={"article_user": user, "articles": articles}
+    )
 
 
 @login_required

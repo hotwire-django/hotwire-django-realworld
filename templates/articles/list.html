@@ -1,3 +1,4 @@
+{% for article in articles %}
 <div class="article-preview">
   <div class="article-meta">
     <a href="{% url 'profile_view' profile=article.author.user.username %}"
@@ -22,3 +23,6 @@
     <span>Read more...</span>
   </a>
 </div>
+{% empty %}
+<div class="article-preview">No articles are here... yet.</div>
+{% endfor %}
