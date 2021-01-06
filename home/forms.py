@@ -4,6 +4,7 @@ from django.contrib.auth import (
     password_validation,
 )
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm as AuthAuthenticationForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -20,6 +21,21 @@ class UsernameField(forms.CharField):
             "placeholder": "Username",
             "class": "form-control form-control-lg",
         }
+
+
+class UserLoginForm(AuthAuthenticationForm):
+    username = UsernameField()
+    password = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(
+            attrs={
+                "autocomplete": "current-password",
+                "class": "form-control form-control-lg",
+                "placeholder": "Password",
+            }
+        ),
+    )
 
 
 class UserCreationForm(forms.ModelForm):

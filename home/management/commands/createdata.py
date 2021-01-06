@@ -1,9 +1,8 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from random_username.generate import generate_username
 from essential_generators import DocumentGenerator
 from articles.models import Article, Comment, Tag
-from profiles.models import Profile
 import string
 import random
 
@@ -49,16 +48,17 @@ class Command(BaseCommand):
         )
         names = generate_username(int(options["num_users"]))
         User = get_user_model()
-        users = User.objects.bulk_create(
-            [User(username=n, password=self.password) for n in names]
-        )
+        users = [
+            User.objects.create_user(username=n, password=self.password) for n in names
+        ]
         print(users)
         gen = DocumentGenerator()
         gen.init_word_cache(5000)
         gen.init_sentence_cache(5000)
         for user in users:
             user = User.objects.get(username=user.username)
-            profile = Profile.objects.create(user=user, bio=gen.sentence())
+            user.profile.bio = gen.sentence()
+            user.profile.save()
             articles = Article.objects.bulk_create(
                 [
                     Article(
@@ -66,7 +66,7 @@ class Command(BaseCommand):
                         title=gen.sentence(),
                         description=gen.sentence(),
                         body=gen.paragraph(),
-                        author=profile,
+                        author=user.profile,
                     )
                     # Make sure every user has at least 1 article
                     for _ in range(random.randrange(1, self.article_upper_bound))

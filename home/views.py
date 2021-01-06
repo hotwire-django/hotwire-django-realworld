@@ -1,18 +1,34 @@
 from django.shortcuts import render
 from articles.models import Article, Tag
 from django.contrib.auth import login as auth_login, authenticate
+from django.http import HttpResponseRedirect
+from django.contrib.auth.views import LoginView as AuthLoginView
 from django.shortcuts import render, redirect
-from .forms import UserCreationForm
+from .forms import UserCreationForm, UserLoginForm
 
 
-def index(req):
+def index(request):
     articles = Article.objects.all()
     tags = Tag.objects.all()
-    return render(req, "index.html", context={"articles": articles, "tags": tags})
+    return render(request, "index.html", context={"articles": articles, "tags": tags})
 
 
-def login(req):
-    return render(req, "login.html")
+class LoginView(AuthLoginView):
+    template_name = "login.html"
+    form_class = UserLoginForm
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form.
+        Turbo wants a 422 on errors.
+        """
+        return self.render_to_response(self.get_context_data(form=form), status=422)
+
+    def form_valid(self, form):
+        """Security check complete. Log the user in.
+        Turbo wants a 303 on success.
+        """
+        auth_login(self.request, form.get_user())
+        return HttpResponseRedirect(self.get_success_url(), status=303)
 
 
 def signup(request):

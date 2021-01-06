@@ -33,6 +33,7 @@
             <!-- Add "active" class when you're on that page" -->
             <a class="nav-link active" href="{% url 'index' %}">Home</a>
           </li>
+          {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'article_create' %}">
               <i class="ion-compose"></i>&nbsp;New Post
@@ -43,13 +44,15 @@
               <i class="ion-gear-a"></i>&nbsp;Settings
             </a>
           </li>
-          {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'profile_edit' %}">
               {{user.username}}
             </a>
           </li>
           {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}"> &nbsp;Sign in </a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'signup' %}">Sign up</a>
           </li>

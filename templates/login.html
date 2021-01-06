@@ -3,38 +3,22 @@
   <div class="container page">
     <div class="row">
       <div class="col-md-6 offset-md-3 col-xs-12">
-        <h1 class="text-xs-center">Sign up</h1>
+        <h1 class="text-xs-center">Sign in</h1>
         <p class="text-xs-center">
-          <a href="">Have an account?</a>
+          <a href="{% url 'signup' %}">Need an account?</a>
         </p>
 
-        <ul class="error-messages">
-          <li>That email is already taken</li>
-        </ul>
+        <div class="error-messages">
+          {{ form.non_field_errors }} {{ form.username.errors }} {{ form.password.errors }}
+        </div>
 
-        <form>
-          <fieldset class="form-group">
-            <input
-              class="form-control form-control-lg"
-              type="text"
-              placeholder="Your Name"
-            />
-          </fieldset>
-          <fieldset class="form-group">
-            <input
-              class="form-control form-control-lg"
-              type="text"
-              placeholder="Email"
-            />
-          </fieldset>
-          <fieldset class="form-group">
-            <input
-              class="form-control form-control-lg"
-              type="password"
-              placeholder="Password"
-            />
-          </fieldset>
-          <button class="btn btn-lg btn-primary pull-xs-right">Sign up</button>
+        <form method="post">
+          {% csrf_token %}
+          <fieldset class="form-group">{{ form.username }}</fieldset>
+          <fieldset class="form-group">{{ form.password }}</fieldset>
+          <button class="btn btn-lg btn-primary pull-xs-right" type="submit">
+            Sign in
+          </button>
         </form>
       </div>
     </div>

@@ -28,5 +28,5 @@ urlpatterns = [
     path("@<slug:profile>/", profile_views.view, name="profile_view"),
     path("settings/", profile_views.edit, name="profile_edit"),
     path("register/", home_views.signup, name="signup"),
-    path("login/", home_views.login, name="login"),
+    path("login/", home_views.LoginView.as_view(), name="login"),
 ]

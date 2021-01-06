@@ -5,11 +5,11 @@
       <div class="col-md-6 offset-md-3 col-xs-12">
         <h1 class="text-xs-center">Sign up</h1>
         <p class="text-xs-center">
-          <a href="">Have an account?</a>
+          <a href="{% url 'login' %}">Have an account?</a>
         </p>
 
         <div class="error-messages">
-          {{ form.username.errors }} {{ form.password.errors }}
+          {{ form.non_field_errors }} {{ form.username.errors }} {{ form.password.errors }}
         </div>
 
         <form method="post">
