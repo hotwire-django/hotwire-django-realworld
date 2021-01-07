@@ -44,6 +44,8 @@ class ArticleForm(ModelForm):
         }
 
     def save(self, user):
-        self.instance.author = user.profile
-        self.instance.slug = make_slug(self.instance.title)
+        if not self.instance.pk:
+            self.instance.author = user.profile
+            self.instance.slug = make_slug(self.instance.title)
+
         return super().save()
