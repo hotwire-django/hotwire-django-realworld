@@ -1,16 +1,59 @@
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import FormView, CreateView
+from .models import Article
+from .forms import ArticleForm
 
 
-def view(req, title):
+def view(req, slug):
     return render(req, "articles/detail.html")
 
 
-@login_required
-def edit(req, slug):
-    return render(req, "articles/edit.html")
+class EditArticle(FormView):
+    form_class = ArticleForm
+    template_name = "articles/edit.html"
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form.
+        Turbo wants a 422 on errors.
+        """
+        return self.render_to_response(self.get_context_data(form=form), status=422)
+
+    def form_valid(self, form):
+        """Security check complete. Log the user in.
+        Turbo wants a 303 on success.
+        """
+        return HttpResponseRedirect(self.get_success_url(), status=303)
+
+
+class CreateArticle(CreateView):
+    template_name = "articles/edit.html"
+    model = Article
+    form_class = ArticleForm
+
+    def get_success_url(self):
+        return reverse_lazy("article_view", slug=self.object.slug)
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form.
+        Turbo wants a 422 on errors.
+        """
+        return self.render_to_response(self.get_context_data(form=form), status=422)
+
+    def form_valid(self, form):
+        """Security check complete. Log the user in.
+        Turbo wants a 303 on success.
+        """
+        form.save()
+        return HttpResponseRedirect(self.get_success_url(), status=303)
 
 
 @login_required
-def create(req):
+def edit(req, slug=None):
+    if slug:
+        article = get_object_or_404(Article, slug=slug)
+
     return render(req, "articles/edit.html")
