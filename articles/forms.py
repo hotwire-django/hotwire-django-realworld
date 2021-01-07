@@ -1,7 +1,10 @@
-from django.forms import ModelForm, Textarea, CharField, TextInput
-from .models import Article
+
 import random
 import string
+
+from django.forms import ModelForm, Textarea, CharField, TextInput
+
+from .models import Article, Tag
 
 
 def make_slug(title):
@@ -12,9 +15,18 @@ def make_slug(title):
 
 
 class ArticleForm(ModelForm):
+    tags = CharField(
+        widget=TextInput(
+            attrs={
+                "class": "form-control form-control-lg",
+                "placeholder": "Enter tags"
+            }
+        )
+    )
+
     class Meta:
         model = Article
-        fields = ("title", "description", "body")
+        fields = ("title", "description", "body", "tags")
         widgets = {
             "title": TextInput(
                 attrs={
@@ -35,13 +47,26 @@ class ArticleForm(ModelForm):
                     "rows": 8,
                 }
             ),
-            # "tags": TextInput(
-            #     attrs={
-            #         "class": "form-control form-control-lg",
-            #         "placeholder": "Enter tags",
-            #     }
-            # ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['tags'].widget.format_value = self._format_tags_value
+
+    def _format_tags_value(self, queryset):
+        return ', '.join(
+            self.instance.tags.values_list('tag', flat=True)
+        )
+
+    def clean_tags(self, *args, **kwargs):
+        return [
+            Tag.objects.get_or_create(
+                tag=tag.strip(),
+                defaults={'slug': make_slug(tag.strip())}
+            )[0]
+            for tag in self.cleaned_data['tags'].split(',')
+        ]
 
     def save(self, user):
         if not self.instance.pk:
