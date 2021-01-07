@@ -13,8 +13,11 @@ def view(req, slug):
 
 
 class EditArticle(FormView):
-    form_class = ArticleForm
     template_name = "articles/edit.html"
+    form_class = ArticleForm
+
+    def get_success_url(self):
+        return reverse_lazy("article_view", slug=self.instance.slug)
 
     def form_invalid(self, form):
         """If the form is invalid, render the invalid form.
@@ -35,7 +38,7 @@ class CreateArticle(CreateView):
     form_class = ArticleForm
 
     def get_success_url(self):
-        return reverse_lazy("article_view", slug=self.object.slug)
+        return reverse_lazy("article_view", kwargs={"slug": self.object.slug})
 
     def form_invalid(self, form):
         """If the form is invalid, render the invalid form.
@@ -47,7 +50,7 @@ class CreateArticle(CreateView):
         """Security check complete. Log the user in.
         Turbo wants a 303 on success.
         """
-        form.save()
+        self.object = form.save(self.request.user)
         return HttpResponseRedirect(self.get_success_url(), status=303)
 
 

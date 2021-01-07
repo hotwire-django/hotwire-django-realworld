@@ -5,6 +5,7 @@ from essential_generators import DocumentGenerator
 from articles.models import Article, Comment, Tag
 import string
 import random
+from articles.forms import make_slug
 
 
 tags = [
@@ -25,11 +26,6 @@ tags = [
     ("Hot Magenta", "hotmagenta"),
     ("Purple Pizzazz", "purplepizzazz"),
 ]
-
-
-def clean_slug(slug):
-    allowed = string.ascii_lowercase + "-"
-    return "".join([a for a in slug if a in allowed])
 
 
 class Command(BaseCommand):
@@ -62,7 +58,7 @@ class Command(BaseCommand):
             articles = Article.objects.bulk_create(
                 [
                     Article(
-                        slug=clean_slug(gen.slug()),
+                        slug=make_slug(gen.sentence()),
                         title=gen.sentence(),
                         description=gen.sentence(),
                         body=gen.paragraph(),
