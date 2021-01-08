@@ -3,7 +3,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import FormView, CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, UpdateView
 from .models import Article
 from .forms import ArticleForm
 
@@ -12,7 +13,7 @@ def view(req, slug):
     return render(req, "articles/detail.html")
 
 
-class EditArticle(UpdateView):
+class EditArticle(LoginRequiredMixin, UpdateView):
     template_name = "articles/edit.html"
     model = Article
     form_class = ArticleForm
@@ -34,7 +35,7 @@ class EditArticle(UpdateView):
         return HttpResponseRedirect(self.get_success_url(), status=303)
 
 
-class CreateArticle(CreateView):
+class CreateArticle(LoginRequiredMixin, CreateView):
     template_name = "articles/edit.html"
     model = Article
     form_class = ArticleForm
