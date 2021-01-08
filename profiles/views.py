@@ -1,5 +1,7 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 
 from .forms import EditProfileForm
 from articles.models import Article
@@ -48,7 +50,6 @@ def follow(request, profile):
 
     context = {
         "target_user": target_user,
-        "user": request.user,
         "is_following": is_following,
     }
 
@@ -59,5 +60,4 @@ def follow(request, profile):
             request.user.profile.unfollow(target_user.profile)
         else:
             request.user.profile.follow(target_user.profile)
-        return render(request, "profile/_follow.html", context)
-        # return HttpResponseRedirect(reverse('follow_profile', profile), status=303)
+        return HttpResponseRedirect(reverse('follow_profile', kwargs={"profile": profile}), status=303)
