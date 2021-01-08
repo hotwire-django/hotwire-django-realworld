@@ -55,9 +55,9 @@ def follow(request, profile):
 
     if request.method == "GET":
         return render(request, "profile/_follow.html", context)
-    elif request.method == "POST":
+    elif request.method == "POST" and request.user.is_authenticated:
         if is_following:
             request.user.profile.unfollow(target_user.profile)
         else:
             request.user.profile.follow(target_user.profile)
-        return HttpResponseRedirect(reverse('follow_profile', kwargs={"profile": profile}), status=303)
+        return HttpResponseRedirect(reverse('profile_follow', kwargs={"profile": profile}), status=303)

@@ -1,6 +1,6 @@
 <turbo-frame id="follow-button-{{ target_user.username }}">
     {% if request.user.is_authenticated %}
-        <form method="POST" action="{% url 'follow_profile' target_user.profile %}">
+        <form method="POST" action="{% url 'profile_follow' target_user.profile %}">
             {% csrf_token %}
             <button class="btn btn-sm btn-outline-secondary action-btn">
                 <i class="ion-plus-round"></i>&nbsp;
