@@ -4,12 +4,14 @@ A RealWorld Django app using Turbo. See [RealWorld](https://github.com/gothinkst
 
 ## Install
 
-1. python3 -m venv venv
-1. source venv/bin/activate
-1. pip install -r requirements.txt
-1. ./manage.py migrate
-1. ./manage.py createdata 10
-1. ./manage.py runserver
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+./manage.py migrate
+./manage.py createdata 10
+./manage.py runserver
+```
 
 ## Tests
 
