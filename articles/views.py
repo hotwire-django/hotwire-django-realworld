@@ -1,16 +1,24 @@
-from django.shortcuts import get_object_or_404
+
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView, UpdateView
+from django.db.models import Count
+
 from .models import Article
 from .forms import ArticleForm
 
 
+class IsAuthenticatedOrReadOnly(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.method == 'GET' or self.request.user.is_authenticated
+
+
 def view(req, slug):
-    return render(req, "articles/detail.html")
+    return render(req, "articles/detail.html", {
+        "article": Article.objects.get(slug=slug)
+    })
 
 
 class EditArticle(LoginRequiredMixin, UpdateView):
@@ -54,4 +62,33 @@ class CreateArticle(LoginRequiredMixin, CreateView):
         Turbo wants a 303 on success.
         """
         self.object = form.save(self.request.user)
+        return HttpResponseRedirect(self.get_success_url(), status=303)
+
+
+class FavoriteArticle(IsAuthenticatedOrReadOnly, UpdateView):
+    fields = []
+    template_name = 'articles/_favorite.html'
+    queryset = Article.objects.select_related('author__user').annotate(
+        favorited_by__count=Count('favorited_by')
+    )
+
+    def get_success_url(self):
+        return reverse_lazy('article_favorite', kwargs={'slug': self.object.slug})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if self.request.user.is_authenticated:
+            context['has_favorited'] = self.request.user.profile.has_favorited(self.object)
+
+        return context
+
+    def form_valid(self, form):
+        profile = self.request.user.profile
+
+        if profile.has_favorited(self.object):
+            profile.unfavorite(self.object)
+        else:
+            profile.favorite(self.object)
+
         return HttpResponseRedirect(self.get_success_url(), status=303)
