@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import EditProfileForm
-from .models import Profile
+from django.db.models import Count
 from articles.models import Article
 from django.contrib.auth import get_user_model
 
 
 def view(req, profile):
     user = get_object_or_404(get_user_model(), username=profile)
-    articles = Article.objects.filter(author=user.profile)
+    articles = Article.objects.filter(author=user.profile).select_related("author").annotate(favorited_by__count=Count("favorited_by"))
     return render(
         req, "profile/detail.html", context={"article_user": user, "articles": articles}
     )

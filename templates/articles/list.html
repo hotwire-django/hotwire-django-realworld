@@ -14,7 +14,7 @@
       <span class="date">{{ article.created_at }}</span>
     </div>
     <button class="btn btn-outline-primary btn-sm pull-xs-right">
-      <i class="ion-heart"></i> {{ article.favorited_by.count }}
+      <i class="ion-heart"></i> {{ article.favorited_by__count }}
     </button>
   </div>
   <a href="{% url 'article_view' article.slug %}" class="preview-link">
