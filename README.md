@@ -1,6 +1,6 @@
 # hotwire-django-realworld
 
-A RealWorld Django app using Turbo. See [RealWorld](https://github.com/gothinkster/realworld).
+A RealWorld Django app using Turbo. See [RealWorld](https://github.com/gothinkster/realworld). A live demo is [hosted on Heroku](https://hotwire-django-realworld.herokuapp.com/)
 
 ## Install
 
