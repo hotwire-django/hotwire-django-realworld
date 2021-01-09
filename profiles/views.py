@@ -8,10 +8,15 @@ from django.contrib.auth import get_user_model
 
 def view(req, profile):
     user = get_object_or_404(get_user_model(), username=profile)
-    articles = Article.objects.filter(author=user.profile).select_related("author").annotate(favorited_by__count=Count("favorited_by"))
-    return render(
-        req, "profile/detail.html", context={"article_user": user, "articles": articles}
+    articles = (
+        Article.objects.filter(author=user.profile)
+        .select_related("author")
+        .annotate(favorited_by__count=Count("favorited_by"))
     )
+    context = {"article_user": user, "articles": articles}
+    if req.user == user:
+        context["nav_link"] = "profile"
+    return render(req, "profile/detail.html", context=context)
 
 
 @login_required
@@ -36,4 +41,9 @@ def edit(request):
     else:
         form = EditProfileForm(initial=initial)
 
-    return render(request, "profile/edit.html", {"form": form}, status=status)
+    return render(
+        request,
+        "profile/edit.html",
+        {"form": form, "nav_link": "settings"},
+        status=status,
+    )
