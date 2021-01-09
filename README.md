@@ -16,3 +16,8 @@ pip install -r requirements.txt
 ## Tests
 
 Run `pytest`.
+
+# License
+hotwire-django-realworld is released under the MIT License to keep compatibility with both the Hotwire project and the [RealWorld starter kit](https://github.com/gothinkster/realworld-starter-kit).
+
+If you submit a pull request. Remember to add yourself to CONTRIBUTORS.md!
