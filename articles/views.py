@@ -17,6 +17,7 @@ class EditArticle(LoginRequiredMixin, UpdateView):
     template_name = "articles/edit.html"
     model = Article
     form_class = ArticleForm
+    extra_context = {"nav_link": "new_post"}
 
     def get_success_url(self):
         return reverse_lazy("article_view", kwargs={"slug": self.object.slug})
@@ -39,6 +40,7 @@ class CreateArticle(LoginRequiredMixin, CreateView):
     template_name = "articles/edit.html"
     model = Article
     form_class = ArticleForm
+    extra_context = {"nav_link": "new_post"}
 
     def get_success_url(self):
         return reverse_lazy("article_view", kwargs={"slug": self.object.slug})
