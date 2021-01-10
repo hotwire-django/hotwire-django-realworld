@@ -5,5 +5,5 @@ black
 pyyaml
 random-username
 essential-generators
-gunicorn
+uvicorn[standard]
 django-heroku
