@@ -5,12 +5,39 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
-from .models import Article
+from django.views.generic import ListView
+from .models import Article, Tag
 from .forms import ArticleForm
 
 
 def view(req, slug):
     return render(req, "articles/detail.html")
+
+
+class ListArticle(ListView):
+    template_name = "articles/list.html"
+    paginate_by = 10
+    model = Article
+
+    def _get_query_context(self):
+        qs = {"active_tab": "global", "tag": None}
+        tag_slug = self.request.GET.get("tag")
+        if tag_slug:
+            tag = get_object_or_404(Tag, slug=tag_slug)
+            qs["tag"] = tag
+            qs["active_tab"] = "tag"
+        return qs
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if tag := self._get_query_context()["tag"]:
+            qs = qs.filter(tags__slug=tag.slug)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update(self._get_query_context())
+        return ctx
 
 
 class EditArticle(LoginRequiredMixin, UpdateView):
