@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home_views.index, name="index"),
     path("article/<slug:slug>/", articles_views.view, name="article_view"),
+    path("article/<slug:slug>/favorite/", articles_views.FavoriteArticle.as_view(), name="article_favorite"),
     path("editor/<slug:slug>/", articles_views.EditArticle.as_view(), name="article_edit"),
     path("editor/", articles_views.CreateArticle.as_view(), name="article_create"),
     path("@<slug:profile>/", profile_views.view, name="profile_view"),

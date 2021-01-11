@@ -1,0 +1,24 @@
+<turbo-frame id="favorite-button-{{ article.slug }}">
+  {% if request.user.is_authenticated %}
+    <form method="POST" action="{% url 'article_favorite' article.slug %}" class="list-inline-item">
+      {% csrf_token %}
+
+      {% if has_favorited %}
+        <button class="btn btn-sm btn-primary">
+          <i class="ion-heart"></i>
+          &nbsp; Unfavorite Post <span class="counter">({{ article.favorited_by__count }})</span>
+        </button>
+      {% else %}
+        <button class="btn btn-sm btn-outline-primary">
+          <i class="ion-heart"></i>
+          &nbsp; Favorite Post <span class="counter">({{ article.favorited_by__count }})</span>
+        </button>
+      {% endif %}
+    </form>
+  {% else %}
+    <a data-turbo="false" href="{% url 'login' %}" class="btn btn-sm btn-outline-primary">
+      <i class="ion-heart"></i>
+      &nbsp; Login to Favorite <span class="counter">({{ article.favorited_by__count }})</span>
+    </a>
+  {% endif %}
+</turbo-frame>
