@@ -19,18 +19,30 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-md-10 offset-md-1">
-        <div class="articles-toggle">
+        <div class="feed-toggle">
           <ul class="nav nav-pills outline-active">
             <li class="nav-item">
-              <a class="nav-link active" href="">My Articles</a>
+              <a
+                class="nav-link {% if active_tab == 'my_articles' %}active{% endif %}"
+                href="{% url 'profile_view' profile=article_user.profile %}"
+                >My Articles</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="">Favorited Articles</a>
+              <a
+                class="nav-link {% if active_tab == 'favorited' %}active{% endif %}"
+                href="{% url 'profile_view' profile=article_user.profile %}?active_tab=favorited"
+                >Favorited Articles</a
+              >
             </li>
           </ul>
         </div>
-
-        {% include 'articles/list.html' %}
+        <turbo-frame
+          id="article-list"
+          src="{% url 'article_list'%}?{{article_params}}"
+        >
+          Loading...
+        </turbo-frame>
       </div>
     </div>
   </div>

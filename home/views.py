@@ -1,24 +1,35 @@
-from django.shortcuts import render
-from articles.models import Article, Tag
+from django.shortcuts import get_object_or_404, render
+from articles.models import Tag
 from django.contrib.auth import login as auth_login, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.shortcuts import redirect
-from django.db.models import Count
 from .forms import UserCreationForm, UserLoginForm
 
 
 def index(request):
-    articles = (
-        Article.objects.all()
-        .select_related("author__user")
-        .annotate(favorited_by__count=Count("favorited_by"))
-    )
     tags = Tag.objects.all()
+    tag_slug = request.GET.get("tag")
+    tag = None
+    active_tab = request.GET.get("active_tab", "global")
+    article_params = ""
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        active_tab = "tag"
+        article_params = f"tag={tag_slug}"
+    if active_tab == "feed":
+        article_params = f"followed_by={request.user.username}"
+
     return render(
         request,
         "index.html",
-        context={"articles": articles, "tags": tags, "nav_link": "home"},
+        context={
+            "tags": tags,
+            "nav_link": "home",
+            "tag": tag,
+            "active_tab": active_tab,
+            "article_params": article_params,
+        },
     )
 
 
