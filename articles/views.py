@@ -58,6 +58,7 @@ class ListArticle(ListView):
             Article.objects.all()
             .select_related("author__user")
             .annotate(favorited_by__count=Count("favorited_by"))
+            .order_by("-created_at")
         )
 
         if tag := self._get_query_context()["tag"]:
