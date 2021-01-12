@@ -121,6 +121,7 @@ venv.bak/
 pythonenv*
 .vscode
 .idea
+.nova
 
 # Spyder project settings
 .spyderproject
