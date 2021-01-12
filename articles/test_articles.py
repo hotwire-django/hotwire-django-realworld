@@ -5,8 +5,7 @@ from django.test import Client
 class MyTest(TestCase):
     fixtures = ["data.yaml"]
 
-    def test_index(self):
-        response = Client().get("/")
+    def test_list(self):
+        response = Client().get("/article/")
         assert response.status_code == 200
-        assert b"conduit" in response.content
-        assert b"emberjs" in response.content
+        assert b"How to build webapps that scale" in response.content

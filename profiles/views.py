@@ -8,12 +8,9 @@ from django.contrib.auth import get_user_model
 
 def view(req, profile):
     user = get_object_or_404(get_user_model(), username=profile)
-    articles = (
-        Article.objects.filter(author=user.profile)
-        .select_related("author")
-        .annotate(favorited_by__count=Count("favorited_by"))
-    )
-    context = {"article_user": user, "articles": articles}
+    context = {
+        "article_user": user,
+    }
     if req.user == user:
         context["nav_link"] = "profile"
     return render(req, "profile/detail.html", context=context)

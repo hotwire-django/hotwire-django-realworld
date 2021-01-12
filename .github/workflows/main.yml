@@ -1,0 +1,24 @@
+name: Test app
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run unit tests
+        run: pytest
+      - name: Setup app
+        run: |
+          ./manage.py migrate
+          ./start.sh &
+      - name: Run integration tests
+        run: curl http://localhost:5000/

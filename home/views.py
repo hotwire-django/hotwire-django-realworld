@@ -1,24 +1,19 @@
-from django.shortcuts import render
-from articles.models import Article, Tag
+from django.shortcuts import get_object_or_404, render
+from articles.models import Tag
 from django.contrib.auth import login as auth_login, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.shortcuts import redirect
-from django.db.models import Count
 from .forms import UserCreationForm, UserLoginForm
 
 
 def index(request):
-    articles = (
-        Article.objects.all()
-        .select_related("author__user")
-        .annotate(favorited_by__count=Count("favorited_by"))
-    )
     tags = Tag.objects.all()
+
     return render(
         request,
         "index.html",
-        context={"articles": articles, "tags": tags, "nav_link": "home"},
+        context={"tags": tags, "nav_link": "home"},
     )
 
 
