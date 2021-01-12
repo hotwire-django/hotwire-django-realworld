@@ -10,37 +10,7 @@
   <div class="container page">
     <div class="row">
       <div class="col-md-9">
-        <div class="feed-toggle">
-          <ul class="nav nav-pills outline-active">
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a
-                class="nav-link {% if active_tab == 'feed' %}active{% endif %}"
-                href="{% url 'index' %}?active_tab=feed"
-                >Your Feed</a
-              >
-            </li>
-            {% endif %}
-            <li class="nav-item">
-              <a
-                class="nav-link {% if active_tab == 'global' %}active{% endif %}"
-                href="{% url 'index' %}"
-                >Global Feed</a
-              >
-            </li>
-            {% if tag %}
-            <li class="nav-item">
-              <a class="nav-link {% if active_tab == 'tag' %}active{% endif %}"
-                >{{tag}}</a
-              >
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-        <turbo-frame
-          id="article-list"
-          src="{% url 'article_list'%}?{{article_params}}"
-        >
+        <turbo-frame id="article-list" src="{% url 'article_list'%}">
         </turbo-frame>
       </div>
 
@@ -50,8 +20,9 @@
           <div class="tag-list">
             {% for tag in tags %}
             <a
-              href="{% url 'index' %}?tag={{ tag.slug }}"
+              href="{% url 'article_list' %}?tag={{ tag.slug }}"
               class="tag-pill tag-default"
+              data-turbo-frame="article-list"
               >{{ tag }}</a
             >
             {% endfor %}

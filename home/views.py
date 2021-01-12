@@ -9,27 +9,11 @@ from .forms import UserCreationForm, UserLoginForm
 
 def index(request):
     tags = Tag.objects.all()
-    tag_slug = request.GET.get("tag")
-    tag = None
-    active_tab = request.GET.get("active_tab", "global")
-    article_params = ""
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        active_tab = "tag"
-        article_params = f"tag={tag_slug}"
-    if active_tab == "feed":
-        article_params = f"followed_by={request.user.username}"
 
     return render(
         request,
         "index.html",
-        context={
-            "tags": tags,
-            "nav_link": "home",
-            "tag": tag,
-            "active_tab": active_tab,
-            "article_params": article_params,
-        },
+        context={"tags": tags, "nav_link": "home"},
     )
 
 

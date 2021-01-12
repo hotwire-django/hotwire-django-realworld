@@ -20,13 +20,64 @@ class ListArticle(ListView):
     paginate_by = 10
     model = Article
 
+    def _make_tabs(self, ctx):
+        tabs = []
+        url = reverse_lazy("article_list")
+        default_active = not any(
+            [ctx.get(a) for a in ["followed_by", "favorited", "tag"]]
+        )
+        if ctx["profile"]:
+            profile = ctx["profile"]
+            tabs.append(
+                {
+                    "url": url + f"?profile={profile}",
+                    "text": "My Articles",
+                    "active": default_active,
+                }
+            )
+            tabs.append(
+                {
+                    "url": url + f"?favorited={profile}&profile={profile}",
+                    "text": "Favorited Articles",
+                    "active": ctx.get("favorited") is not None,
+                }
+            )
+        else:
+            if self.request.user.is_authenticated:
+                tabs.append(
+                    {
+                        "url": url + f"?followed_by={self.request.user}",
+                        "text": "Your Feed",
+                        "active": ctx.get("followed_by") is not None,
+                    }
+                )
+            tabs.append(
+                {
+                    "url": url,
+                    "text": "Global",
+                    "active": default_active,
+                }
+            )
+            if ctx.get("tag"):
+                tabs.append(
+                    {
+                        "url": url + f'?tag={ctx.get("tag").slug}',
+                        "text": ctx.get("tag"),
+                        "active": ctx.get("tag") is not None,
+                    }
+                )
+        return tabs
+
     def _get_query_context(self):
         ctx = {
             "tag": None,
             "query_string": [],
+            "profile": None,
             "author": None,
             "favorited": None,
             "followed_by": None,
+            "type": None,
+            "tabs": [],
         }
 
         tag_slug = self.request.GET.get("tag")
@@ -35,10 +86,10 @@ class ListArticle(ListView):
             ctx["tag"] = tag
             ctx["query_string"].append(f"tag={tag_slug}")
 
-        author = self.request.GET.get("author")
-        if author:
-            ctx["author"] = author
-            ctx["query_string"].append(f"author={author}")
+        profile = self.request.GET.get("profile")
+        if profile:
+            ctx["profile"] = profile
+            ctx["query_string"].append(f"profile={profile}")
 
         favorited = self.request.GET.get("favorited")
         if favorited:
@@ -51,6 +102,7 @@ class ListArticle(ListView):
             ctx["query_string"].append(f"followed_by={followed_by}")
 
         ctx["query_string"] = "&".join(ctx["query_string"])
+        ctx["tabs"] = self._make_tabs(ctx)
         return ctx
 
     def get_queryset(self):
@@ -60,14 +112,18 @@ class ListArticle(ListView):
             .annotate(favorited_by__count=Count("favorited_by"))
             .order_by("-created_at")
         )
-
-        if tag := self._get_query_context()["tag"]:
+        ctx = self._get_query_context()
+        if tag := ctx["tag"]:
             qs = qs.filter(tags__slug=tag.slug)
 
-        if author := self._get_query_context()["author"]:
-            qs = qs.filter(author__user__username=author)
+        if profile := ctx["profile"]:
+            qs = qs.filter(author__user__username=profile)
 
-        if favorited := self._get_query_context()["favorited"]:
+        if favorited := ctx["favorited"]:
+            qs = qs.filter(favorited_by__user__username=favorited)
+
+        if favorited := ctx["followed_by"]:
+            # FIXFIX get articles by author the user follows
             qs = qs.filter(favorited_by__user__username=favorited)
 
         return qs

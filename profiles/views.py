@@ -8,14 +8,8 @@ from django.contrib.auth import get_user_model
 
 def view(req, profile):
     user = get_object_or_404(get_user_model(), username=profile)
-    active_tab = req.GET.get("active_tab", "my_articles")
-    article_params = f"author={user.username}"
-    if active_tab == "favorited":
-        article_params = f"favorited={user.username}"
     context = {
         "article_user": user,
-        "active_tab": active_tab,
-        "article_params": article_params,
     }
     if req.user == user:
         context["nav_link"] = "profile"

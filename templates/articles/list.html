@@ -1,4 +1,18 @@
 <turbo-frame id="article-list">
+  <div class="feed-toggle">
+    <ul class="nav nav-pills outline-active">
+      {% for tab in tabs %}
+      <li class="nav-item">
+        <a
+          class="nav-link {% if tab.active %}active{% endif %}"
+          href="{{tab.url}}"
+          >{{tab.text}}</a
+        >
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
   {% for article in page_obj %}
   <div class="article-preview">
     <div class="article-meta">
