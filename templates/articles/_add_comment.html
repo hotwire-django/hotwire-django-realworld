@@ -9,7 +9,7 @@
                     src="{{ user.profile.img }}"
                     class="comment-author-img"
             />
-            <span class="comment-author">Commenting as <a href="{% url 'profile_view' request.user.username %}">{{ user }}</a></span>
+            <span class="comment-author">Commenting as <a href="{% url 'profile_view' request.user.username %}" data-turbo-frame="_top">{{ user }}</a></span>
             <button class="btn btn-sm btn-primary" type="submit">Post Comment</button>
         </div>
     </form>

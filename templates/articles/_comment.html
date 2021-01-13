@@ -10,14 +10,14 @@
                 </p>
             </div>
             <div class="card-footer">
-                <a href="{% url 'profile_view' comment.author.user.username %}" class="comment-author">
+                <a href="{% url 'profile_view' comment.author.user.username %}" class="comment-author" data-turbo-frame="_top">
                     <img
                             src="{{ comment.author.img }}"
                             class="comment-author-img"
                     />
                 </a>
                 &nbsp;
-                <a href="{% url 'profile_view' comment.author.user.username %}" class="comment-author">{{ comment.author }}</a>
+                <a href="{% url 'profile_view' comment.author.user.username %}" class="comment-author" data-turbo-frame="_top">{{ comment.author }}</a>
                 <span class="date-posted">{{ comment.updated_at }}</span>
 
                 {% if user.profile == comment.author %}
