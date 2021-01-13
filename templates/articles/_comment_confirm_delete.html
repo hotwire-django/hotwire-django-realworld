@@ -1,0 +1,17 @@
+<turbo-frame id="comment-{{ comment.pk }}">
+    <div class="card">
+        <div class="card-block">
+            <p class="card-text">
+                Are you sure you want to delete your comment "{{ comment.body }}"?
+            </p>
+        </div>
+            <div class="card-footer">
+            <form method="post" action="{% url 'delete_comment' comment.pk %}">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-sm btn-danger" value="Confirm Delete">
+                <a href="{% url 'view_comment' comment.pk %}" class="btn btn-default">Cancel</a>
+            </form>
+            </div>
+    </div>
+
+</turbo-frame>

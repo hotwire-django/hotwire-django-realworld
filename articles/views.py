@@ -1,18 +1,84 @@
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.views.generic import DetailView, TemplateView, ListView
+from django.http import HttpResponseRedirect, StreamingHttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, UpdateView
-from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.db.models import Count
-from .models import Article, Tag
-from .forms import ArticleForm
+
+from .models import Article, Comment, Tag
+from .forms import ArticleForm, CommentForm
+from .mixins import UserIsAuthorMixin
 
 
-def view(req, slug):
-    return render(req, "articles/detail.html")
+class ViewArticle(DetailView):
+    model = Article
+    template_name = "articles/detail.html"
+    context_object_name = "article"
+
+
+class AddComment(LoginRequiredMixin, CreateView):
+    model = Comment
+    template_name = "articles/_add_comment.html"
+    form_class = CommentForm
+
+    def get_login_url(self):
+        return reverse_lazy("login_to_add_comment", kwargs={"slug": self.kwargs["slug"]})
+
+    def form_valid(self, form):
+        form.instance.article = Article.objects.get(slug=self.kwargs["slug"])
+        form.instance.author = self.request.user.profile
+        new_comment = form.save()
+        comment_author = self.request.user
+
+        def render_comment_turbo_stream():
+            new_comment_partial = render_to_string("articles/_comment.html",
+                                                   {"comment": new_comment, "user": comment_author})
+            return f'<turbo-stream target="comments" action="prepend">' \
+                   f'<template>{new_comment_partial}<template>' \
+                   f'</turbo-stream>'
+
+        return StreamingHttpResponse(render_comment_turbo_stream(), content_type="text/html; turbo-stream;")
+
+
+class LoginToAddComment(TemplateView):
+    template_name = "articles/_login_to_add_comment.html"
+
+
+class ViewComment(DetailView):
+    model = Comment
+    template_name = "articles/_comment.html"
+    context_object_name = "comment"
+
+
+class EditComment(UserIsAuthorMixin, LoginRequiredMixin, UpdateView):
+    model = Comment
+    template_name = 'articles/_edit_comment.html'
+    form_class = CommentForm
+    context_object_name = 'comment'
+
+    def get_success_url(self):
+        return reverse_lazy("view_comment", kwargs={"pk": self.object.pk})
+
+
+class DeletedComment(TemplateView):
+    comment_deleted = True
+    template_name = "articles/_comment.html"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(
+            content_type="text/html; turbo-stream; charset=utf-8", *args, **kwargs
+        )
+
+
+class DeleteComment(UserIsAuthorMixin, LoginRequiredMixin, DeleteView):
+    model = Comment
+    template_name = "articles/_comment_confirm_delete.html"
+    context_object_name = "comment"
+
+    def get_success_url(self):
+        return reverse_lazy("deleted_comment", kwargs={"pk": self.object.pk})
 
 
 class ListArticle(ListView):
