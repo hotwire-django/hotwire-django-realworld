@@ -39,7 +39,7 @@ class AddComment(LoginRequiredMixin, CreateView):
                    f'<template>{new_comment_partial}<template>' \
                    f'</turbo-stream>'
 
-        return StreamingHttpResponse(render_comment_turbo_stream(), content_type="text/html; turbo-stream;")
+        return StreamingHttpResponse(render_comment_turbo_stream(), content_type="text/vnd.turbo-stream.html")
 
 
 class LoginToAddComment(TemplateView):
@@ -68,7 +68,7 @@ class DeletedComment(TemplateView):
 
     def __init__(self, *args, **kwargs):
         super().__init__(
-            content_type="text/html; turbo-stream; charset=utf-8", *args, **kwargs
+            content_type="text/vnd.turbo-stream.html", *args, **kwargs
         )
 
 
