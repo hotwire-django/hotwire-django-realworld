@@ -24,6 +24,7 @@ urlpatterns = [
     path("", home_views.index, name="index"),
     path("article/<slug:slug>/", articles_views.ViewArticle.as_view(), name="article_view"),
     path("article/<slug:slug>/add_comment", articles_views.AddComment.as_view(), name="add_comment"),
+    path("article/<slug:slug>/comments", articles_views.ViewCommentsForArticle.as_view(), name="view_comments_for_article"),
     path("article/comment/login_to_add/<slug:slug>", articles_views.LoginToAddComment.as_view(), name="login_to_add_comment"),
     path("article/comment/<int:pk>", articles_views.ViewComment.as_view(), name="view_comment"),
     path("article/comment/<int:pk>/edit", articles_views.EditComment.as_view(), name="edit_comment"),

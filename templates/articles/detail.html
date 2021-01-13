@@ -61,12 +61,7 @@
        <turbo-frame id="add_comment" src="{% url 'add_comment' article.slug %}">
        </turbo-frame>
 
-      <turbo-frame id="comments">
-       {% for comment in article.comments.all %}
-
-           {% include 'articles/_comment.html' %}
-
-       {% endfor %}
+      <turbo-frame id="comments" loading="lazy" src="{% url 'view_comments_for_article' article.slug %}">
       </turbo-frame>
 
       </div>

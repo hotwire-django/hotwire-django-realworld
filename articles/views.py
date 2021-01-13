@@ -52,6 +52,15 @@ class ViewComment(DetailView):
     context_object_name = "comment"
 
 
+class ViewCommentsForArticle(ListView):
+    template_name = "articles/_comments_list.html"
+    context_object_name = "comments"
+
+    def get_queryset(self):
+        self.article = get_object_or_404(Article, slug=self.kwargs['slug'])
+        return Comment.objects.filter(article=self.article)
+
+
 class EditComment(UserIsAuthorMixin, LoginRequiredMixin, UpdateView):
     model = Comment
     template_name = 'articles/_edit_comment.html'
