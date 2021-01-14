@@ -31,9 +31,11 @@
         </a>
         <span class="date">{{ article.created_at }}</span>
       </div>
-      <button class="btn btn-outline-primary btn-sm pull-xs-right">
-        <i class="ion-heart"></i> {{ article.favorited_by__count }}
-      </button>
+      <turbo-frame
+        id="favorite-{{ article.slug }}"
+        src="{% url 'article_favorite' slug=article.slug %}?mini=true"
+      >
+      </turbo-frame>
     </div>
     <a
       href="{% url 'article_view' article.slug %}"
@@ -81,10 +83,5 @@
       >
       {% endif %}
     </span>
-    <script>
-      function toTop() {
-        window.scrollTo(0, 0);
-      }
-    </script>
   </div>
 </turbo-frame>
