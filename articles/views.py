@@ -1,7 +1,9 @@
-from django.shortcuts import get_object_or_404
+from django.http.response import Http404
+from django.shortcuts import get_object_or_404, redirect
+from django.conf import settings
 from django.urls import reverse_lazy
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, UpdateView
@@ -12,7 +14,8 @@ from .forms import ArticleForm
 
 
 def view(req, slug):
-    return render(req, "articles/detail.html")
+    article = get_object_or_404(Article, slug=slug)
+    return render(req, "articles/detail.html", {"article": article})
 
 
 class ListArticle(ListView):
@@ -178,3 +181,40 @@ class CreateArticle(LoginRequiredMixin, CreateView):
         """
         self.object = form.save(self.request.user)
         return HttpResponseRedirect(self.get_success_url(), status=303)
+
+
+def favorite_article(request, slug):
+    template = "articles/favorite.html"
+    if request.GET.get("mini", None):
+        template = "articles/favorite_mini.html"
+
+    query = Article.objects.annotate(favorited_by__count=Count("favorited_by"))
+    article = get_object_or_404(query, slug=slug)
+
+    favorited = False
+    if request.user.is_authenticated:
+        favorited = request.user.profile.has_favorited(article)
+
+    if request.method == "POST" and request.user.is_authenticated:
+        if favorited:
+            request.user.profile.unfavorite(article)
+        else:
+            request.user.profile.favorite(article)
+        favorited = not favorited
+
+    active_class = "btn-outline-primary"
+    if favorited:
+        active_class = "btn-primary"
+
+    # refresh counts
+    article = get_object_or_404(query, slug=slug)
+
+    return render(
+        request,
+        template,
+        context={
+            "article": article,
+            "active_class": active_class,
+            "favorited": favorited,
+        },
+    )

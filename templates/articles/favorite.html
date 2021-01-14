@@ -1,0 +1,34 @@
+<turbo-frame id="favorite-{{ article.slug }}">
+  {% if request.method == 'POST' %}
+  <script>
+    document
+      .querySelectorAll("#favorite-{{article.slug}}")
+      .forEach((e) => e.attributeChangedCallback("src"));
+  </script>
+
+  {% else %} {% if request.user.is_authenticated %}
+  <form
+    method="POST"
+    action="{% url 'article_favorite' article.slug %}"
+    class="list-inline-item"
+  >
+    {% csrf_token %}
+    <button class="btn btn-sm {{ active_class }}">
+      <i class="ion-heart"></i>
+      {% if favorited %} &nbsp; Unfavorite Post {% else %} &nbsp; Favorite Post
+      {% endif %}
+      <span class="counter">({{ article.favorited_by__count }})</span>
+    </button>
+  </form>
+  {% else %}
+  <a
+    href="{% url 'login' %}"
+    class="btn btn-sm btn-outline-primary"
+    target="_top"
+  >
+    <i class="ion-heart"></i>
+    &nbsp; Favorite Post
+    <span class="counter">({{ article.favorited_by__count }})</span>
+  </a>
+  {% endif %} {% endif %}
+</turbo-frame>

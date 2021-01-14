@@ -25,6 +25,11 @@ urlpatterns = [
     path("article/<slug:slug>/", articles_views.view, name="article_view"),
     path("article/", articles_views.ListArticle.as_view(), name="article_list"),
     path(
+        "article/<slug:slug>/favorite/",
+        articles_views.favorite_article,
+        name="article_favorite",
+    ),
+    path(
         "editor/<slug:slug>/", articles_views.EditArticle.as_view(), name="article_edit"
     ),
     path("editor/", articles_views.CreateArticle.as_view(), name="article_create"),

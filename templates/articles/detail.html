@@ -15,10 +15,9 @@
           &nbsp; Follow Eric Simons <span class="counter">(10)</span>
         </button>
         &nbsp;&nbsp;
-        <button class="btn btn-sm btn-outline-primary">
-          <i class="ion-heart"></i>
-          &nbsp; Favorite Post <span class="counter">(29)</span>
-        </button>
+        <turbo-frame
+        id="favorite-{{ article.slug }}"
+        src="{% url 'article_favorite' slug=article.slug %}">
       </div>
     </div>
   </div>
@@ -50,10 +49,9 @@
           &nbsp; Follow Eric Simons <span class="counter">(10)</span>
         </button>
         &nbsp;
-        <button class="btn btn-sm btn-outline-primary">
-          <i class="ion-heart"></i>
-          &nbsp; Favorite Post <span class="counter">(29)</span>
-        </button>
+        <turbo-frame
+        id="favorite-{{ article.slug }}"
+        src="{% url 'article_favorite' slug=article.slug %}">
       </div>
     </div>
 
