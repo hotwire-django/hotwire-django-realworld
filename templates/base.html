@@ -17,9 +17,8 @@
     />
     <!-- Import the custom Bootstrap 4 theme from our hosted CDN -->
     <link rel="stylesheet" href="https://demo.productionready.io/main.css" />
-
     <script
-      src="https://unpkg.com/@hotwired/turbo@7.0.0-beta.2/dist/turbo.es2017-umd.js"
+      src="https://unpkg.com/@hotwired/turbo@7.0.0-beta.3/dist/turbo.es2017-umd.js"
       defer
       data-turbo-track="reload"
     ></script>
@@ -31,22 +30,32 @@
         <ul class="nav navbar-nav pull-xs-right">
           <li class="nav-item">
             <!-- Add "active" class when you're on that page" -->
-            <a class="nav-link active" href="{% url 'index' %}">Home</a>
+            <a
+              class="nav-link {% if nav_link == 'home' %}active{% endif %}"
+              href="{% url 'index' %}"
+              >Home</a
+            >
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'article_create' %}">
+            <a
+              class="nav-link {% if nav_link == 'new_post' %}active{% endif %}"
+              href="{% url 'article_create' %}"
+            >
               <i class="ion-compose"></i>&nbsp;New Post
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'profile_edit' %}">
+            <a
+              class="nav-link {% if nav_link == 'settings' %}active{% endif %}"
+              href="{% url 'profile_edit' %}"
+            >
               <i class="ion-gear-a"></i>&nbsp;Settings
             </a>
           </li>
           <li class="nav-item">
             <a
-              class="nav-link"
+              class="nav-link {% if nav_link == 'profile' %}active{% endif %}"
               href="{% url 'profile_view' profile=user.username %}"
             >
               {{user.username}}
@@ -54,10 +63,19 @@
           </li>
           {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}"> &nbsp;Sign in </a>
+            <a
+              class="nav-link {% if nav_link == 'sign_in' %}active{% endif %}"
+              href="{% url 'login' %}"
+            >
+              &nbsp;Sign in
+            </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'signup' %}">Sign up</a>
+            <a
+              class="nav-link {% if nav_link == 'sign_up' %}active{% endif %}"
+              href="{% url 'signup' %}"
+              >Sign up</a
+            >
           </li>
           {% endif %}
         </ul>
@@ -68,9 +86,15 @@
       <div class="container">
         <a href="/" class="logo-font">conduit</a>
         <span class="attribution">
-          An interactive learning project from
-          <a href="https://thinkster.io">Thinkster</a>. Code &amp; design
-          licensed under MIT.
+          A
+          <a href="https://github.com/gothinkster/realworld">RealWorld</a>
+          implementation with Django and
+          <a href="https://hotwire.dev/">Hotwire</a> by the
+          <a href="https://github.com/hotwire-django">Hotwire Django team</a>.
+          Code &amp; design licensed under MIT. Source on
+          <a href="https://github.com/hotwire-django/hotwire-django-realworld"
+            >GitHub</a
+          >.
         </span>
       </div>
     </footer>

@@ -1,21 +1,26 @@
-from django.shortcuts import render
-from articles.models import Article, Tag
+from django.shortcuts import get_object_or_404, render
+from articles.models import Tag
 from django.contrib.auth import login as auth_login, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib.auth.views import LoginView as AuthLoginView
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from .forms import UserCreationForm, UserLoginForm
 
 
 def index(request):
-    articles = Article.objects.all()
     tags = Tag.objects.all()
-    return render(request, "index.html", context={"articles": articles, "tags": tags})
+
+    return render(
+        request,
+        "index.html",
+        context={"tags": tags, "nav_link": "home"},
+    )
 
 
 class LoginView(AuthLoginView):
     template_name = "login.html"
     form_class = UserLoginForm
+    extra_context = {"nav_link": "sign_in"}
 
     def form_invalid(self, form):
         """If the form is invalid, render the invalid form.
@@ -49,4 +54,6 @@ def signup(request):
         status = 422
     else:
         form = UserCreationForm()
-    return render(request, "signup.html", {"form": form}, status=status)
+    return render(
+        request, "signup.html", {"form": form, "nav_link": "sign_up"}, status=status
+    )

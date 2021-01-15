@@ -4,16 +4,19 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from .forms import EditProfileForm
+from django.db.models import Count
 from articles.models import Article
 from django.contrib.auth import get_user_model
 
 
 def view(req, profile):
     user = get_object_or_404(get_user_model(), username=profile)
-    articles = Article.objects.filter(author=user.profile)
-    return render(
-        req, "profile/detail.html", context={"article_user": user, "articles": articles}
-    )
+    context = {
+        "article_user": user,
+    }
+    if req.user == user:
+        context["nav_link"] = "profile"
+    return render(req, "profile/detail.html", context=context)
 
 
 @login_required
@@ -38,7 +41,12 @@ def edit(request):
     else:
         form = EditProfileForm(initial=initial)
 
-    return render(request, "profile/edit.html", {"form": form}, status=status)
+    return render(
+        request,
+        "profile/edit.html",
+        {"form": form, "nav_link": "settings"},
+        status=status,
+    )
 
 
 def follow(request, profile):

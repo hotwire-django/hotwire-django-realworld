@@ -1,0 +1,16 @@
+<turbo-frame id="add_comment">
+    <form action="{{ view.request.get_full_path }}" class="card comment-form" method="post">
+    {% csrf_token %}
+        <div class="card-block">
+            {{ form.body }}
+        </div>
+        <div class="card-footer">
+            <img
+                    src="{{ user.profile.img }}"
+                    class="comment-author-img"
+            />
+            <span class="comment-author">Commenting as <a href="{% url 'profile_view' request.user.username %}" data-turbo-frame="_top">{{ user }}</a></span>
+            <button class="btn btn-sm btn-primary" type="submit">Post Comment</button>
+        </div>
+    </form>
+</turbo-frame>

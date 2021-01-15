@@ -1,0 +1,5 @@
+<turbo-frame id="add_comment">
+    <div class="card m-5">
+        <a href="{% url 'login' %}?next={% url 'article_view' view.kwargs.slug %}" class="btn btn-sm btn-block btn-primary" data-turbo-frame="_top">Login to Comment</a>
+    </div>
+</turbo-frame>

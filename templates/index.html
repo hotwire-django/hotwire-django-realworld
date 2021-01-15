@@ -3,36 +3,28 @@
   <div class="banner">
     <div class="container">
       <h1 class="logo-font">conduit</h1>
-      <p>A place to share your knowledge.</p>
+      <p>A Hotwire Django implementation.</p>
     </div>
   </div>
 
   <div class="container page">
     <div class="row">
       <div class="col-md-9">
-        <div class="feed-toggle">
-          <ul class="nav nav-pills outline-active">
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="">Your Feed</a>
-            </li>
-            {% endif %}
-            <li class="nav-item">
-              <a class="nav-link active" href="">Global Feed</a>
-            </li>
-          </ul>
-        </div>
-
-        {% include 'articles/list.html' %}
+        <turbo-frame id="article-list" src="{% url 'article_list'%}">
+        </turbo-frame>
       </div>
 
       <div class="col-md-3">
         <div class="sidebar">
           <p>Popular Tags</p>
-
           <div class="tag-list">
             {% for tag in tags %}
-            <a href="{{ tag.slug }}" class="tag-pill tag-default">{{ tag }}</a>
+            <a
+              href="{% url 'article_list' %}?tag={{ tag.slug }}"
+              class="tag-pill tag-default"
+              data-turbo-frame="article-list"
+              >{{ tag }}</a
+            >
             {% endfor %}
           </div>
         </div>

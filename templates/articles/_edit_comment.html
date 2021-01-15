@@ -1,0 +1,13 @@
+<turbo-frame id="comment-{{ comment.pk }}">
+    <form action="{{ view.request.get_full_path }}" class="card comment-form" method="post">
+    {% csrf_token %}
+        <div class="card-block">
+            {{ form.body }}
+        </div>
+        <div class="card-footer">
+
+            <button class="btn btn-sm btn-primary" type="submit">Update Comment</button>
+            <a href="{% url 'view_comment' comment.pk %}" class="btn btn-sm">Cancel</a>
+        </div>
+    </form>
+</turbo-frame>
