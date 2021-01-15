@@ -5,7 +5,7 @@
       <h1>{{ article.title }}</h1>
 
       <div class="article-meta">
-        <a href=""><img src="{{ article.author.img }}" /></a>
+        <a href="{% url 'profile_view' article.author.user.username %}"><img src="{{ article.author.img }}" /></a>
         <div class="info">
           <a href="{% url 'profile_view' article.author.user.username %}" class="author">{{ article.author }}</a>
           <span class="date">{{ article.created_at }}</span>
