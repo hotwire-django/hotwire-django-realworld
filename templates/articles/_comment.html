@@ -1,0 +1,33 @@
+{% if view.comment_deleted %}
+    <turbo-stream action="remove" target="comment-{{ view.kwargs.pk }}">
+    </turbo-stream>
+{% else %}
+    <turbo-frame id="comment-{{ comment.pk }}">
+        <div class="card">
+            <div class="card-block">
+                <p class="card-text">
+                    {{ comment.body }}
+                </p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'profile_view' comment.author.user.username %}" class="comment-author" data-turbo-frame="_top">
+                    <img
+                            src="{{ comment.author.img }}"
+                            class="comment-author-img"
+                    />
+                </a>
+                &nbsp;
+                <a href="{% url 'profile_view' comment.author.user.username %}" class="comment-author" data-turbo-frame="_top">{{ comment.author }}</a>
+                <span class="date-posted">{{ comment.updated_at }}</span>
+
+                {% if user.profile == comment.author %}
+                <span class="mod-options">
+                    <a href="{% url 'edit_comment' comment.pk %}"><i class="ion-edit"></i></a>
+                    <a href="{% url 'delete_comment' comment.pk %}"><i class="ion-trash-a"></i></a>
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </turbo-frame>
+{% endif %}
+

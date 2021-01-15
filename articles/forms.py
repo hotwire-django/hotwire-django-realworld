@@ -4,7 +4,7 @@ import string
 
 from django.forms import ModelForm, Textarea, CharField, TextInput
 
-from .models import Article, Tag
+from .models import Article, Comment, Tag
 
 
 def make_slug(title):
@@ -12,6 +12,21 @@ def make_slug(title):
     slug = title.lower().replace(" ", "-")
     allowed = string.ascii_lowercase + "-"
     return "".join([a for a in slug if a in allowed])[:20].strip(" -") + f"-{rnd}"
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['body']
+        widgets = {
+            "body": Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Write a comment...",
+                    "rows": 3,
+                }
+            )
+        }
 
 
 class ArticleForm(ModelForm):
