@@ -1,5 +1,8 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+
 from .forms import EditProfileForm
 from django.db.models import Count
 from articles.models import Article
@@ -44,3 +47,25 @@ def edit(request):
         {"form": form, "nav_link": "settings"},
         status=status,
     )
+
+
+def follow(request, profile):
+    target_user = get_object_or_404(get_user_model(), username=profile)
+    if request.user.is_authenticated:
+        is_following = request.user.profile.is_following(target_user.profile)
+    else:
+        is_following = False
+
+    context = {
+        "target_user": target_user,
+        "is_following": is_following,
+    }
+
+    if request.method == "GET":
+        return render(request, "profile/_follow.html", context)
+    elif request.method == "POST" and request.user.is_authenticated:
+        if is_following:
+            request.user.profile.unfollow(target_user.profile)
+        else:
+            request.user.profile.follow(target_user.profile)
+        return HttpResponseRedirect(reverse('profile_follow', kwargs={"profile": profile}), status=303)

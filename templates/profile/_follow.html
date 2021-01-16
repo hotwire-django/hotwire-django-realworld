@@ -1,0 +1,17 @@
+<turbo-frame id="follow-button-{{ target_user.username }}">
+    {% if request.user.is_authenticated %}
+        <form method="POST" action="{% url 'profile_follow' target_user.profile %}">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline-secondary action-btn">
+                <i class="ion-plus-round"></i>&nbsp;
+                {% if not is_following %} Follow {% else %} Unfollow {% endif %}
+                @{{ target_user.username }}
+                <span class="counter">({{ target_user.profile.followed_by.count }})</span>
+            </button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-sm btn-outline-secondary action-btn">
+            Log in to join <span class="counter">{{ target_user.profile.followed_by.count }} followers</span>
+        </a>
+    {% endif %}
+</turbo-frame>

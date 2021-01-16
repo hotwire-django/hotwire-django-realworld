@@ -7,10 +7,10 @@
           <img src="{{ article_user.profile.img }}" class="user-img" />
           <h4>{{ article_user.username }}</h4>
           <p>{{ article_user.profile.bio }}</p>
-          <button class="btn btn-sm btn-outline-secondary action-btn">
-            <i class="ion-plus-round"></i>
-            &nbsp; Follow {{ article_user.username }}
-          </button>
+          <turbo-frame
+                  id="follow-button-{{ article_user.username }}"
+                  src="{% url 'follow_profile' article_user.username %}"
+          />
         </div>
       </div>
     </div>
