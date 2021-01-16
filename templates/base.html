@@ -56,7 +56,7 @@
           <li class="nav-item">
             <a
               class="nav-link {% if nav_link == 'profile' %}active{% endif %}"
-              href="{% url 'profile_view' profile=user.username %}"
+              href="{{ user.profile.get_absolute_url }}"
             >
               {{user.username}}
             </a>

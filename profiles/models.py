@@ -75,6 +75,10 @@ class Profile(TimestampedModel):
     def name(self):
         return f"{self.user.first_name} {self.user.last_name}"
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('profile_view', args=[str(self)])
+
 
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
