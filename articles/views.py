@@ -212,9 +212,6 @@ class EditArticle(UserIsAuthorMixin, LoginRequiredMixin, UpdateView):
     form_class = ArticleForm
     extra_context = {"nav_link": "new_post"}
 
-    def get_success_url(self):
-        return reverse_lazy("article_view", kwargs={"slug": self.object.slug})
-
     def form_invalid(self, form):
         """If the form is invalid, render the invalid form.
         Turbo wants a 422 on errors.
@@ -234,9 +231,6 @@ class CreateArticle(LoginRequiredMixin, CreateView):
     model = Article
     form_class = ArticleForm
     extra_context = {"nav_link": "new_post"}
-
-    def get_success_url(self):
-        return reverse_lazy("article_view", kwargs={"slug": self.object.slug})
 
     def form_invalid(self, form):
         """If the form is invalid, render the invalid form.
