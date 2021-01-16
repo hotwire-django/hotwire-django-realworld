@@ -9,7 +9,7 @@
           <p>{{ article_user.profile.bio }}</p>
           <turbo-frame
                   id="follow-button-{{ article_user.username }}"
-                  src="{% url 'follow_profile' article_user.username %}"
+                  src="{% url 'profile_follow' article_user.username %}"
           />
         </div>
       </div>
