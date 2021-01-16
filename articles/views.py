@@ -67,9 +67,6 @@ class EditComment(UserIsAuthorMixin, LoginRequiredMixin, UpdateView):
     form_class = CommentForm
     context_object_name = 'comment'
 
-    def get_success_url(self):
-        return reverse_lazy("view_comment", kwargs={"pk": self.object.pk})
-
 
 class DeletedComment(TemplateView):
     comment_deleted = True

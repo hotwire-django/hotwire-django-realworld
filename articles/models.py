@@ -40,6 +40,10 @@ class Comment(TimestampedModel):
         "profiles.Profile", related_name="comments", on_delete=models.CASCADE
     )
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('view_comment', args=[str(self.pk)])
+
 
 class Tag(TimestampedModel):
     tag = models.CharField(max_length=255)
