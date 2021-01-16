@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from realworld.models import TimestampedModel
 
@@ -76,7 +77,6 @@ class Profile(TimestampedModel):
         return f"{self.user.first_name} {self.user.last_name}"
 
     def get_absolute_url(self):
-        from django.urls import reverse
         return reverse('profile_view', args=[str(self)])
 
 
