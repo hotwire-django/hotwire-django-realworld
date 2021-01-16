@@ -209,7 +209,7 @@ class ListArticle(ListView):
         return ctx
 
 
-class EditArticle(LoginRequiredMixin, UpdateView):
+class EditArticle(UserIsAuthorMixin, LoginRequiredMixin, UpdateView):
     template_name = "articles/edit.html"
     model = Article
     form_class = ArticleForm
