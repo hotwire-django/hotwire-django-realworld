@@ -21,6 +21,10 @@ class Article(TimestampedModel):
 
     tags = models.ManyToManyField("articles.Tag", related_name="articles")
 
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('article_view', args=[str(self.slug)])
+
     def __str__(self):
         return self.title
 

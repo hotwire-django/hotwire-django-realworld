@@ -36,7 +36,7 @@
       </button>
     </div>
     <a
-      href="{% url 'article_view' article.slug %}"
+      href="{{ article.get_absolute_url }}"
       class="preview-link"
       target="_top"
     >
