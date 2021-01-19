@@ -5,9 +5,9 @@
       <h1>{{ article.title }}</h1>
 
       <div class="article-meta">
-        <a href="{% url 'profile_view' article.author.user.username %}"><img src="{{ article.author.img }}" /></a>
+        <a href="{{ article.author.get_absolute_url }}"><img src="{{ article.author.img }}" /></a>
         <div class="info">
-          <a href="{% url 'profile_view' article.author.user.username %}" class="author">{{ article.author }}</a>
+          <a href="{{ article.author.get_absolute_url }}" class="author">{{ article.author }}</a>
           <span class="date">{{ article.created_at }}</span>
         </div>
         <button class="btn btn-sm btn-outline-secondary">
@@ -37,9 +37,9 @@
 
     <div class="article-actions">
       <div class="article-meta">
-        <a href="{% url 'profile_view' article.author.user.username %}"><img src="{{ article.author.img }}" /></a>
+        <a href="{{ article.author.get_absolute_url }}"><img src="{{ article.author.img }}" /></a>
         <div class="info">
-          <a href="{% url 'profile_view' article.author.user.username %}" class="author">{{ article.author }}</a>
+          <a href="{{ article.author.get_absolute_url }}" class="author">{{ article.author }}</a>
           <span class="date">{{ article.created_at }}</span>
         </div>
 

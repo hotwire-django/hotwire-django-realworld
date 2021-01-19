@@ -17,13 +17,13 @@
   <div class="article-preview">
     <div class="article-meta">
       <a
-        href="{% url 'profile_view' profile=article.author.user.username %}"
+        href="{{ article.author.get_absolute_url }}"
         target="_top"
         ><img src="{{ article.author.img }}"
       /></a>
       <div class="info">
         <a
-          href="{% url 'profile_view' profile=article.author.user.username %}"
+          href="{{ article.author.get_absolute_url }}"
           class="author"
           target="_top"
         >
@@ -36,7 +36,7 @@
       </button>
     </div>
     <a
-      href="{% url 'article_view' article.slug %}"
+      href="{{ article.get_absolute_url }}"
       class="preview-link"
       target="_top"
     >

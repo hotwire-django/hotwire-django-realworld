@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from realworld.models import TimestampedModel
 
@@ -21,6 +22,9 @@ class Article(TimestampedModel):
 
     tags = models.ManyToManyField("articles.Tag", related_name="articles")
 
+    def get_absolute_url(self):
+        return reverse('article_view', args=[str(self.slug)])
+
     def __str__(self):
         return self.title
 
@@ -35,6 +39,9 @@ class Comment(TimestampedModel):
     author = models.ForeignKey(
         "profiles.Profile", related_name="comments", on_delete=models.CASCADE
     )
+
+    def get_absolute_url(self):
+        return reverse('view_comment', args=[str(self.pk)])
 
 
 class Tag(TimestampedModel):
