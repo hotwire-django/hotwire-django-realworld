@@ -1,0 +1,8 @@
+tasks:
+  - init: pip install -r ./requirements.txt
+ports:
+  - port: 8080
+vscode:
+  extensions:
+    - batisteo.vscode-django@1.6.0:9f987cebe6a5eec08e1fe0f98c3aeb30
+    - ecmel.vscode-html-css@1.9.1:23103121f682e8e5bbd2f7e5e55c8a6e
